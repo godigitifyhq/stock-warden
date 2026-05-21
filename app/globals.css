@@ -1,26 +1,86 @@
 @import "tailwindcss";
 
+@plugin "tailwindcss-animate/index.js";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-display: 'DM Serif Display', ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+
+  --color-canvas: var(--bg-canvas);
+  --color-surface: var(--bg-surface);
+  --color-subtle: var(--bg-subtle);
+  --color-muted: var(--bg-muted);
+
+  --color-ink-primary: var(--ink-primary);
+  --color-ink-secondary: var(--ink-secondary);
+  --color-ink-tertiary: var(--ink-tertiary);
+  --color-ink-disabled: var(--ink-disabled);
+
+  --color-accent-primary: var(--accent-primary);
+  --color-accent-primary-bg: var(--accent-primary-bg);
+  --color-accent-hover: var(--accent-hover);
+
+  --color-status-requested: var(--status-requested);
+  --color-status-approved: var(--status-approved);
+  --color-status-rejected: var(--status-rejected);
+  --color-status-pending: var(--status-pending);
+  --color-status-cancelled: var(--status-cancelled);
+
+  --color-border-default: var(--border-default);
+  --color-border-strong: var(--border-strong);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  /* Base — warm off-white, not pure white */
+  --bg-canvas:      #F7F5F2;
+  --bg-surface:     #FFFFFF;
+  --bg-subtle:      #F0EDE8;
+  --bg-muted:       #E8E4DE;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Ink — warm dark, not pure black */
+  --ink-primary:    #1C1917;
+  --ink-secondary:  #44403C;
+  --ink-tertiary:   #78716C;
+  --ink-disabled:   #A8A29E;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Accent — deep forest green (institutional, not tech-startup) */
+  --accent-primary:    #166534;
+  --accent-primary-bg: #DCFCE7;
+  --accent-hover:      #14532D;
+
+  /* Status semantic colors */
+  --status-requested:  #B45309;  /* amber */
+  --status-approved:   #166534;  /* green */
+  --status-rejected:   #B91C1C;  /* red */
+  --status-pending:    #1D4ED8;  /* blue */
+  --status-cancelled:  #71717A;  /* gray */
+
+  /* Borders */
+  --border-default:  #E7E5E4;
+  --border-strong:   #A8A29E;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #F7F5F2;
+  background-color: var(--bg-canvas);
+  color: #1C1917;
+  color: var(--ink-primary);
+  font-family: 'Geist', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  font-family: var(--font-sans);
+}
+
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  max-height: 2.5em;
 }

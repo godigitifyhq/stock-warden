@@ -34,3 +34,8 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Developer Notes
+
+- **Autoprefixer:** If `npm run dev` fails with `Cannot find module 'autoprefixer'`, run `npm install` and delete the `.next` folder before restarting the dev server. If the error persists under Turbopack, move `autoprefixer` from `devDependencies` to `dependencies` in [package.json](package.json) and reinstall.
+- **Recent frontend changes:** See [COLLEGE_IMS_DEV_DOCS.md](COLLEGE_IMS_DEV_DOCS.md) → **Recent Changes (2026-05-20)** for notes about flex gap → spacing replacements, debounced search hook, and notification polling tuning.
