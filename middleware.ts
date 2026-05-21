@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/auth";
+import type { NextRequest } from "next/server";
+import { getToken } from "next-auth/jwt";
 import { ROLE_GUARDS } from "@/lib/auth/roles";
-import { createClient } from "@/utils/supabase/middleware";
 
 function resolveRequiredRoles(pathname: string) {
   return Object.entries(ROLE_GUARDS).find(([prefix]) =>
@@ -9,26 +9,28 @@ function resolveRequiredRoles(pathname: string) {
   )?.[1];
 }
 
-export default auth(async (request) => {
+export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const requiredRoles = resolveRequiredRoles(pathname);
 
   if (requiredRoles === undefined || requiredRoles.length === 0) {
-    const response = NextResponse.next();
-    const { supabase } = createClient(request, response, request.headers);
-    await supabase.auth.getUser();
-    return response;
+    return NextResponse.next();
   }
 
-  const session = request.auth;
-  if (!session?.user) {
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+
+  if (!token) {
     return NextResponse.json(
       { success: false, error: { code: "UNAUTHORIZED" } },
       { status: 401 }
     );
   }
 
-  if (!requiredRoles.includes(session.user.role)) {
+  const role = (token.role as string) ?? "USER";
+  if (!requiredRoles.includes(role)) {
     return NextResponse.json(
       { success: false, error: { code: "FORBIDDEN" } },
       { status: 403 }
@@ -36,19 +38,16 @@ export default auth(async (request) => {
   }
 
   const requestHeaders = new Headers(request.headers);
-  requestHeaders.set("x-user-id", session.user.id);
-  requestHeaders.set("x-user-role", session.user.role);
-  if (session.user.email) {
-    requestHeaders.set("x-user-email", session.user.email);
+  requestHeaders.set("x-user-id", token.sub ?? "");
+  requestHeaders.set("x-user-role", role);
+  if (token.email) {
+    requestHeaders.set("x-user-email", token.email);
   }
 
-  const response = NextResponse.next({
+  return NextResponse.next({
     request: { headers: requestHeaders },
   });
-  const { supabase } = createClient(request, response, requestHeaders);
-  await supabase.auth.getUser();
-  return response;
-});
+}
 
 export const config = {
   matcher: ["/api/:path*"],
