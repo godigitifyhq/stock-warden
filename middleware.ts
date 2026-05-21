@@ -1,7 +1,9 @@
+import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { getToken } from "next-auth/jwt";
+import { authConfig } from "@/auth.config";
 import { ROLE_GUARDS } from "@/lib/auth/roles";
+
+const { auth } = NextAuth(authConfig);
 
 function resolveRequiredRoles(pathname: string) {
   return Object.entries(ROLE_GUARDS).find(([prefix]) =>
@@ -9,7 +11,7 @@ function resolveRequiredRoles(pathname: string) {
   )?.[1];
 }
 
-export default async function middleware(request: NextRequest) {
+export default auth(async (request) => {
   const { pathname } = request.nextUrl;
   const requiredRoles = resolveRequiredRoles(pathname);
 
@@ -17,20 +19,15 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const token = await getToken({
-    req: request,
-    secret: process.env.NEXTAUTH_SECRET,
-  });
-
-  if (!token) {
+  const session = request.auth;
+  if (!session?.user) {
     return NextResponse.json(
       { success: false, error: { code: "UNAUTHORIZED" } },
       { status: 401 }
     );
   }
 
-  const role = (token.role as string) ?? "USER";
-  if (!requiredRoles.includes(role)) {
+  if (!requiredRoles.includes(session.user.role)) {
     return NextResponse.json(
       { success: false, error: { code: "FORBIDDEN" } },
       { status: 403 }
@@ -38,16 +35,16 @@ export default async function middleware(request: NextRequest) {
   }
 
   const requestHeaders = new Headers(request.headers);
-  requestHeaders.set("x-user-id", token.sub ?? "");
-  requestHeaders.set("x-user-role", role);
-  if (token.email) {
-    requestHeaders.set("x-user-email", token.email);
+  requestHeaders.set("x-user-id", session.user.id);
+  requestHeaders.set("x-user-role", session.user.role);
+  if (session.user.email) {
+    requestHeaders.set("x-user-email", session.user.email);
   }
 
   return NextResponse.next({
     request: { headers: requestHeaders },
   });
-}
+});
 
 export const config = {
   matcher: ["/api/:path*"],
