@@ -8,17 +8,28 @@ import AppLayout from "@/components/layout/app-layout";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
+  fallback: ["Segoe UI", "Helvetica Neue", "Arial", "sans-serif"],
+  adjustFontFallback: true,
+  preload: true,
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
+  fallback: ["Consolas", "Courier New", "monospace"],
+  adjustFontFallback: true,
 });
 
 const dmSerif = DM_Serif_Display({
   variable: "--font-dm-serif",
   weight: "400",
   subsets: ["latin"],
+  display: "swap",
+  fallback: ["Georgia", "Times New Roman", "serif"],
+  adjustFontFallback: true,
+  preload: true,
 });
 
 export const metadata: Metadata = {

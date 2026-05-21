@@ -9,6 +9,7 @@ import { formatINR } from '@/lib/utils/format'
 import { Filter, X, CheckCircle, XCircle } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { ConfirmModal } from '@/components/ui/confirm-modal'
+import { TableWrapper } from '@/components/ui/TableWrapper'
 
 export default function AdminRequestsPage() {
   const queryClient = useQueryClient()
@@ -26,7 +27,7 @@ export default function AdminRequestsPage() {
   })
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 page-enter">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 md:space-x-4">
         <div>
           <h1 className="text-2xl font-display font-bold">Manage Requests</h1>
@@ -53,17 +54,17 @@ export default function AdminRequestsPage() {
         {isLoading ? (
           <div className="p-12 flex justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black" /></div>
         ) : (
-          <div className="overflow-x-auto">
+          <TableWrapper stackOnMobile>
             <table className="w-full text-left text-sm whitespace-nowrap">
               <thead className="bg-[--bg-subtle] border-b border-[--border-default]">
                 <tr>
-                  <th className="px-6 py-4 font-medium text-[--ink-secondary]">ID</th>
-                  <th className="px-6 py-4 font-medium text-[--ink-secondary]">Requester</th>
-                  <th className="px-6 py-4 font-medium text-[--ink-secondary]">Department</th>
-                  <th className="px-6 py-4 font-medium text-[--ink-secondary]">Items</th>
-                  <th className="px-6 py-4 font-medium text-[--ink-secondary] text-right">Amount</th>
-                  <th className="px-6 py-4 font-medium text-[--ink-secondary]">Date</th>
-                  <th className="px-6 py-4 font-medium text-[--ink-secondary]">Status</th>
+                  <th className="px-6 py-4 font-medium text-[--ink-secondary] hidden lg:table-cell no-wrap-cap">ID</th>
+                  <th className="px-6 py-4 font-medium text-[--ink-secondary] no-wrap-cap">Requester</th>
+                  <th className="px-6 py-4 font-medium text-[--ink-secondary] hidden md:table-cell no-wrap-cap">Department</th>
+                  <th className="px-6 py-4 font-medium text-[--ink-secondary] no-wrap-cap">Items</th>
+                  <th className="px-6 py-4 font-medium text-[--ink-secondary] text-right hidden md:table-cell no-wrap-cap">Amount</th>
+                  <th className="px-6 py-4 font-medium text-[--ink-secondary] hidden sm:table-cell no-wrap-cap">Date</th>
+                  <th className="px-6 py-4 font-medium text-[--ink-secondary] no-wrap-cap">Status</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[--border-default]">
@@ -75,24 +76,24 @@ export default function AdminRequestsPage() {
                   </tr>
                 ) : (
                   data?.map((req: any) => (
-                    <tr 
-                      key={req.id} 
+                    <tr
+                      key={req.id}
                       onClick={() => setSelectedRequest(req)}
                       className="hover:bg-[--bg-subtle] cursor-pointer transition-colors"
                     >
-                      <td className="px-6 py-4 font-mono text-xs text-[--ink-secondary]">
+                      <td data-label="ID" className="px-6 py-4 font-mono text-xs text-[--ink-secondary] hidden lg:table-cell">
                         {req.id.split('-')[0]}...
                       </td>
-                      <td className="px-6 py-4 font-medium text-[--ink-primary]">
+                      <td data-label="Requester" className="px-6 py-4 font-medium text-[--ink-primary]">
                         {req.user?.name || 'Unknown'}
                       </td>
-                      <td className="px-6 py-4 text-[--ink-secondary]">
+                      <td data-label="Department" className="px-6 py-4 text-[--ink-secondary] hidden md:table-cell">
                         {req.user?.department || '-'}
                       </td>
-                      <td className="px-6 py-4 font-medium text-[--ink-primary]">
+                      <td data-label="Items" className="px-6 py-4 font-medium text-[--ink-primary]">
                         {req.items?.length} item(s)
                       </td>
-                      <td className="px-6 py-4 text-right font-medium text-[--ink-primary]">
+                      <td data-label="Amount" className="px-6 py-4 text-right font-medium text-[--ink-primary] hidden md:table-cell">
                         {formatINR(
                           (req.items ?? []).reduce((sum: number, ri: any) => {
                             const qty = ri.quantityAllocated ?? ri.quantityFul ?? ri.quantityReq ?? 0
@@ -101,10 +102,10 @@ export default function AdminRequestsPage() {
                           }, 0)
                         )}
                       </td>
-                      <td className="px-6 py-4 text-[--ink-secondary]">
+                      <td data-label="Date" className="px-6 py-4 text-[--ink-secondary] hidden sm:table-cell">
                         {formatDate(req.createdAt)}
                       </td>
-                      <td className="px-6 py-4">
+                      <td data-label="Status" data-full className="px-6 py-4">
                         <StatusBadge status={req.status} />
                       </td>
                     </tr>
@@ -112,7 +113,7 @@ export default function AdminRequestsPage() {
                 )}
               </tbody>
             </table>
-          </div>
+          </TableWrapper>
         )}
       </div>
 
@@ -197,14 +198,22 @@ function RequestDrawer({ request, onClose, onSuccess }: { request: any, onClose:
   return (
     <div className="fixed inset-0 z-50 flex justify-end">
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
-      <div className="relative w-full max-w-lg bg-white h-full shadow-xl flex flex-col animate-in slide-in-from-right overflow-y-auto">
-        <div className="p-6 border-b border-[--border-default] flex items-center justify-between sticky top-0 bg-white z-10">
+      <div
+        className="relative w-full sm:w-[480px] lg:w-[540px] bg-white h-full shadow-xl flex flex-col animate-in slide-in-from-right overflow-y-auto"
+        role="dialog"
+        aria-modal="true"
+      >
+        <div className="p-4 sm:p-6 border-b border-[--border-default] flex items-center justify-between sticky top-0 bg-white z-10">
           <div>
             <h2 className="font-display text-xl font-bold">Process Request</h2>
             <p className="text-xs font-mono text-[--ink-secondary] mt-1">{request.id}</p>
           </div>
-          <button onClick={onClose} className="text-[--ink-secondary] hover:text-[--ink-primary]">
-            <X size={24} />
+          <button
+            onClick={onClose}
+            className="p-2 text-[--ink-secondary] hover:text-[--ink-primary] hover:bg-[--bg-subtle] rounded-md transition-colors"
+            aria-label="Close"
+          >
+            <X size={20} />
           </button>
         </div>
 
@@ -223,7 +232,7 @@ function RequestDrawer({ request, onClose, onSuccess }: { request: any, onClose:
           {/* Items */}
           <div>
             <h3 className="text-xs font-semibold text-[--ink-secondary] uppercase tracking-wider mb-3">Requested Items</h3>
-            <div className="border border-[--border-default] rounded-md overflow-hidden">
+            <div className="border border-[--border-default] rounded-md overflow-x-scroll">
               <table className="w-full text-left text-sm">
                 <thead className="bg-[--bg-subtle] border-b border-[--border-default]">
                   <tr>

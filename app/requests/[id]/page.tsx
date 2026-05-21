@@ -66,7 +66,7 @@ export default function RequestDetailPage() {
   const isReRequestable = req.status === 'REJECTED'
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
+    <div className="space-y-6 max-w-4xl mx-auto page-enter">
       <Link href="/requests" className="inline-flex items-center space-x-2 text-sm font-medium text-[--ink-secondary] hover:text-[--ink-primary]">
         <ArrowLeft size={16} />
         Back to Requests

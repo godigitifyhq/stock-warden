@@ -61,7 +61,7 @@ export default function InventoryManagerDashboard() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 page-enter">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
         <div>
           <h1 className="text-2xl font-display font-bold">Inventory Dashboard</h1>

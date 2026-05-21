@@ -40,7 +40,7 @@ export default function IMItemsPage() {
   const total = inventoryQuery.data?.pages[0]?.meta?.total ?? 0
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 page-enter">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 md:space-x-4">
         <div>
           <h1 className="text-2xl font-display font-bold">All Items</h1>

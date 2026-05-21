@@ -10,6 +10,7 @@ import toast from 'react-hot-toast'
 import { ConfirmModal } from '@/components/ui/confirm-modal'
 import { useDebouncedValue } from '@/lib/hooks/use-debounced-value'
 import { formatINR } from '@/lib/utils/format'
+import { TableWrapper } from '@/components/ui/TableWrapper'
 
 const CATEGORY_OPTIONS = [
   'Consumables',
@@ -108,7 +109,7 @@ export default function AdminInventoryPage() {
   })
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 page-enter">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 md:space-x-4">
         <div>
           <h1 className="text-2xl font-display font-bold">Inventory Management</h1>
@@ -142,18 +143,18 @@ export default function AdminInventoryPage() {
         {inventoryQuery.isLoading ? (
           <div className="p-12 flex justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black" /></div>
         ) : (
-          <div className="overflow-x-auto">
+          <TableWrapper stackOnMobile>
             <table className="w-full text-left text-sm whitespace-nowrap">
               <thead className="bg-[--bg-subtle] border-b border-[--border-default]">
                 <tr>
-                  <th className="px-6 py-4 font-medium text-[--ink-secondary] w-12"></th>
-                  <th className="px-6 py-4 font-medium text-[--ink-secondary]">Name</th>
-                  <th className="px-6 py-4 font-medium text-[--ink-secondary]">Category</th>
-                  <th className="px-6 py-4 font-medium text-[--ink-secondary] text-right">Available Qty</th>
-                  <th className="px-6 py-4 font-medium text-[--ink-secondary] text-right">Unit Price</th>
-                  <th className="px-6 py-4 font-medium text-[--ink-secondary] text-right">Stock Value</th>
-                  <th className="px-6 py-4 font-medium text-[--ink-secondary] text-center">Status</th>
-                  <th className="px-6 py-4 font-medium text-[--ink-secondary] text-right">Actions</th>
+                  <th className="px-6 py-4 font-medium text-[--ink-secondary] w-12 no-wrap-cap"></th>
+                  <th className="px-6 py-4 font-medium text-[--ink-secondary] no-wrap-cap">Name</th>
+                  <th className="px-6 py-4 font-medium text-[--ink-secondary] hidden sm:table-cell no-wrap-cap">Category</th>
+                  <th className="px-6 py-4 font-medium text-[--ink-secondary] text-right no-wrap-cap">Available Qty</th>
+                  <th className="px-6 py-4 font-medium text-[--ink-secondary] text-right hidden md:table-cell no-wrap-cap">Unit Price</th>
+                  <th className="px-6 py-4 font-medium text-[--ink-secondary] text-right hidden lg:table-cell no-wrap-cap">Stock Value</th>
+                  <th className="px-6 py-4 font-medium text-[--ink-secondary] text-center hidden sm:table-cell no-wrap-cap">Status</th>
+                  <th className="px-6 py-4 font-medium text-[--ink-secondary] text-right no-wrap-cap">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[--border-default]">
@@ -164,20 +165,20 @@ export default function AdminInventoryPage() {
                 ) : (
                   items.map((item: any) => (
                     <tr key={item.id} className={`hover:bg-[--bg-canvas] transition-colors ${item.isStale ? 'opacity-60' : ''}`}>
-                      <td className="px-6 py-3">
+                      <td data-label="" className="px-6 py-3">
                         <div className="relative w-10 h-10 rounded border border-[--border-default] bg-[--bg-subtle] overflow-hidden flex items-center justify-center text-[--ink-disabled]">
                           {item.imageUrl ? <Image fill unoptimized src={normalizeDriveImageUrl(item.imageUrl)!} alt={item.name} className="object-cover" /> : <Package size={20} />}
                         </div>
                       </td>
-                      <td className="px-6 py-3 font-medium text-[--ink-primary]">{item.name}</td>
-                      <td className="px-6 py-3 text-[--ink-secondary]">{item.category}</td>
-                      <td className="px-6 py-3 text-right">
+                      <td data-label="Name" className="px-6 py-3 font-medium text-[--ink-primary]">{item.name}</td>
+                      <td data-label="Category" className="px-6 py-3 text-[--ink-secondary] hidden sm:table-cell">{item.category}</td>
+                      <td data-label="Qty" className="px-6 py-3 text-right">
                         <span className={`font-medium ${item.availableQty === 0 ? 'text-red-600' : ''}`}>{item.availableQty}</span>
                         <span className="text-[--ink-secondary] ml-1">{item.unit}</span>
                       </td>
-                      <td className="px-6 py-3 text-right font-medium">{item.unitPrice ? formatINR(Number(item.unitPrice)) : '-'}</td>
-                      <td className="px-6 py-3 text-right font-medium">{item.unitPrice ? formatINR(Number(item.unitPrice) * Number(item.availableQty ?? 0)) : '-'}</td>
-                      <td className="px-6 py-3 text-center">
+                      <td data-label="Unit Price" className="px-6 py-3 text-right font-medium hidden md:table-cell">{item.unitPrice ? formatINR(Number(item.unitPrice)) : '-'}</td>
+                      <td data-label="Stock Value" className="px-6 py-3 text-right font-medium hidden lg:table-cell">{item.unitPrice ? formatINR(Number(item.unitPrice) * Number(item.availableQty ?? 0)) : '-'}</td>
+                      <td data-label="Status" className="px-6 py-3 text-center hidden sm:table-cell">
                         {item.isStale ? (
                           <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-zinc-100 text-zinc-600 border border-zinc-200">Stale</span>
                         ) : (
@@ -187,10 +188,10 @@ export default function AdminInventoryPage() {
                           <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">Hidden</span>
                         ) : null}
                       </td>
-                      <td className="px-6 py-3 text-right">
+                      <td data-label="Actions" data-full className="px-6 py-3 text-right">
                         <div className="flex items-center justify-end space-x-2">
                           <button onClick={() => handleSetPrice(item, setPriceMutation)} className="p-1.5 text-[--ink-secondary] hover:text-black hover:bg-green-100 rounded transition-colors" title="Set Price"><IndianRupee size={16} /></button>
-                          <button onClick={() => setVisibilityAction({ id: item.id, name: item.name, hidden: !item.isHiddenFromUsers })} className="p-1.5 text-[--ink-secondary] hover:text-black  hover:bg-green-100 rounded transition-colors" title={item.isHiddenFromUsers ? 'Unhide from users' : 'Hide from users'}>{item.isHiddenFromUsers ? <Eye size={16} /> : <EyeOff size={16} />}</button>
+                          <button onClick={() => setVisibilityAction({ id: item.id, name: item.name, hidden: !item.isHiddenFromUsers })} className="p-1.5 text-[--ink-secondary] hover:text-black hover:bg-green-100 rounded transition-colors" title={item.isHiddenFromUsers ? 'Unhide from users' : 'Hide from users'}>{item.isHiddenFromUsers ? <Eye size={16} /> : <EyeOff size={16} />}</button>
                           <button onClick={() => setEditingItem(item)} className="p-1.5 text-[--ink-secondary] hover:text-black hover:bg-green-100 rounded transition-colors" title="Edit"><Edit2 size={16} /></button>
                           <button onClick={() => setStaleAction({ id: item.id, name: item.name, action: item.isStale ? 'unmark' : 'mark' })} className="p-1.5 text-[--ink-secondary] hover:text-amber-700 hover:bg-amber-50 rounded transition-colors" title={item.isStale ? 'Unmark Stale' : 'Mark Stale'}><Archive size={16} /></button>
                         </div>
@@ -200,7 +201,7 @@ export default function AdminInventoryPage() {
                 )}
               </tbody>
             </table>
-          </div>
+          </TableWrapper>
         )}
       </div>
 
@@ -396,7 +397,7 @@ function AddItemModal({ onClose }: { onClose: () => void }) {
               setImageFile(nextFile)
               setImagePreview(nextFile ? URL.createObjectURL(nextFile) : null)
             }} className="w-full text-sm" />
-            {imagePreview ? <div className="relative mt-3 aspect-4/3 overflow-hidden rounded-md border border-[--border-default] bg-[--bg-subtle]"><Image fill unoptimized src={imagePreview} width={30} height={30} alt="Selected item preview" className="object-cover" /></div> : <p className="mt-2 text-xs text-[--ink-secondary]">Upload an image to show on inventory cards.</p>}
+            {imagePreview ? <div className="relative mt-3 aspect-4/3 overflow-hidden rounded-md border border-[--border-default] bg-[--bg-subtle]"><Image fill unoptimized src={imagePreview} alt="Selected item preview" className="object-cover" /></div> : <p className="mt-2 text-xs text-[--ink-secondary]">Upload an image to show on inventory cards.</p>}
           </div>
           <div className="pt-4 flex space-x-3">
             <button type="button" onClick={onClose} className="flex-1 py-2 border rounded-md font-medium hover:bg-[--bg-subtle]">Cancel</button>

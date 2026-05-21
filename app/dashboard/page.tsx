@@ -26,9 +26,9 @@ export default function DashboardPage() {
 
   if (isLoadingProfile || isLoadingRequests) {
     return (
-      <div className="animate-pulse space-y-8">
-        <div className="h-24 bg-[--bg-subtle] rounded-lg w-full" />
-        <div className="h-64 bg-[--bg-subtle] rounded-lg w-full" />
+      <div className="space-y-8">
+        <div className="skeleton h-24 rounded-lg w-full" />
+        <div className="skeleton h-64 rounded-lg w-full" />
       </div>
     )
   }
@@ -43,7 +43,7 @@ export default function DashboardPage() {
   const recentRequests = requestsData || []
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 page-enter">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-display font-bold">Welcome back, {profileData?.user?.name?.split(' ')[0] || 'User'}</h1>
         <Link 

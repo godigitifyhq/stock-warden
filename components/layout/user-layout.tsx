@@ -15,6 +15,13 @@ export function UserLayout({ children }: { children: React.ReactNode }) {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false)
   const [isLoggingOut, setIsLoggingOut] = useState(false)
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const handler = () => setScrolled(window.scrollY > 4)
+    window.addEventListener('scroll', handler, { passive: true })
+    return () => window.removeEventListener('scroll', handler)
+  }, [])
 
   const handleLogout = async () => {
     setIsLoggingOut(true)
@@ -81,14 +88,19 @@ export function UserLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      <header className="bg-white border-b border-[--border-default] sticky top-0 z-30">
+      <header className={[
+        'bg-[--bg-surface]/95 backdrop-blur-sm border-b border-[--border-default] sticky top-0 z-30',
+        'transition-shadow duration-200',
+        scrolled ? 'shadow-md' : 'shadow-none',
+      ].join(' ')}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between space-x-3">
           <div className="flex items-center space-x-3 sm:space-x-8">
             <button
               type="button"
               onClick={() => setIsMobileNavOpen((prev) => !prev)}
               className="md:hidden inline-flex items-center justify-center rounded-md border border-[--border-default] p-2 text-[--ink-secondary] hover:text-[--ink-primary]"
-              aria-label="Toggle navigation"
+              aria-label={isMobileNavOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isMobileNavOpen}
             >
               {isMobileNavOpen ? <X size={18} /> : <Menu size={18} />}
             </button>

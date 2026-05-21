@@ -48,7 +48,7 @@ export default function SuperAdminItemDetailsPage() {
   const { item, crossSessionStats, topDepartments } = data || {}
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 page-enter">
       <Link href="/super-admin/overview" className="inline-flex items-center space-x-2 text-sm font-medium text-[--ink-secondary] hover:text-[--ink-primary]">
         <ArrowLeft size={16} />
         Back to Overview

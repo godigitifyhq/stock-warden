@@ -53,7 +53,7 @@ export default function ProfilePage() {
   const { user, stats } = data || {}
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className="max-w-4xl mx-auto space-y-8 page-enter">
       <div>
         <h1 className="text-2xl font-display font-bold">Profile</h1>
         <p className="text-[--ink-secondary] text-sm">Manage your personal information and view stats</p>

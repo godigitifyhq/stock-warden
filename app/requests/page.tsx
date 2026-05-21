@@ -5,6 +5,7 @@ import { api } from '@/lib/api/client'
 import { StatusBadge } from '@/components/ui/status-badge'
 import Link from 'next/link'
 import { formatDate } from '@/lib/utils'
+import { TableWrapper } from '@/components/ui/TableWrapper'
 
 export default function RequestsPage() {
   const { data, isLoading } = useQuery({
@@ -16,7 +17,7 @@ export default function RequestsPage() {
   })
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 page-enter">
       <div>
         <h1 className="text-2xl font-display font-bold">My Requests</h1>
         <p className="text-[--ink-secondary] text-sm">View and track your inventory requests</p>
@@ -35,35 +36,35 @@ export default function RequestsPage() {
             </Link>
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <TableWrapper stackOnMobile>
             <table className="w-full text-left text-sm whitespace-nowrap">
               <thead className="bg-[--bg-subtle] border-b border-[--border-default]">
                 <tr>
-                  <th className="px-6 py-4 font-medium text-[--ink-secondary]">ID</th>
-                  <th className="px-6 py-4 font-medium text-[--ink-secondary]">Items</th>
-                  <th className="px-6 py-4 font-medium text-[--ink-secondary]">Date</th>
-                  <th className="px-6 py-4 font-medium text-[--ink-secondary]">Status</th>
-                  <th className="px-6 py-4 font-medium text-[--ink-secondary] text-right">Action</th>
+                  <th className="px-6 py-4 font-medium text-[--ink-secondary] hidden sm:table-cell no-wrap-cap">ID</th>
+                  <th className="px-6 py-4 font-medium text-[--ink-secondary] no-wrap-cap">Items</th>
+                  <th className="px-6 py-4 font-medium text-[--ink-secondary] hidden sm:table-cell no-wrap-cap">Date</th>
+                  <th className="px-6 py-4 font-medium text-[--ink-secondary] no-wrap-cap">Status</th>
+                  <th className="px-6 py-4 font-medium text-[--ink-secondary] text-right no-wrap-cap">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[--border-default]">
                 {data?.map((req: any) => (
                   <tr key={req.id} className="hover:bg-[--bg-canvas] transition-colors">
-                    <td className="px-6 py-4 font-mono text-xs text-[--ink-secondary]">
+                    <td data-label="ID" className="px-6 py-4 font-mono text-xs text-[--ink-secondary] hidden sm:table-cell">
                       {req.id.split('-')[0]}...
                     </td>
-                    <td className="px-6 py-4 font-medium text-[--ink-primary]">
+                    <td data-label="Items" className="px-6 py-4 font-medium text-[--ink-primary]">
                       {req.items?.length > 0 ? req.items[0].item.name : 'Unknown Item'}
                       {req.items?.length > 1 && <span className="text-[--ink-secondary] font-normal ml-1">+{req.items.length - 1} more</span>}
                     </td>
-                    <td className="px-6 py-4 text-[--ink-secondary]">
+                    <td data-label="Date" className="px-6 py-4 text-[--ink-secondary] hidden sm:table-cell">
                       {formatDate(req.createdAt)}
                     </td>
-                    <td className="px-6 py-4">
+                    <td data-label="Status" className="px-6 py-4">
                       <StatusBadge status={req.status} />
                     </td>
-                    <td className="px-6 py-4 text-right">
-                      <Link 
+                    <td data-label="Action" data-full className="px-6 py-4 text-right">
+                      <Link
                         href={`/requests/${req.id}`}
                         className="text-black font-medium hover:underline"
                       >
@@ -74,7 +75,7 @@ export default function RequestsPage() {
                 ))}
               </tbody>
             </table>
-          </div>
+          </TableWrapper>
         )}
       </div>
     </div>

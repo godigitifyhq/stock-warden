@@ -81,7 +81,7 @@ export default function AdminUsersPage() {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-6 page-enter">
       <div className="mb-8">
         <h1 className="font-display text-2xl font-bold text-[--ink-primary]">Pending Registrations</h1>
         <p className="text-[--ink-secondary] text-sm mt-1">Review and approve new department user accounts.</p>

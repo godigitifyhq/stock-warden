@@ -41,7 +41,7 @@ export default function StockAlertsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 page-enter">
       <div>
         <h1 className="text-2xl font-display font-bold">Stock Alerts</h1>
         <p className="text-sm text-[--ink-secondary]">User notifications about out-of-stock items</p>

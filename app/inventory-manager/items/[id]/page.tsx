@@ -64,7 +64,7 @@ export default function IMEditItemPage() {
   const currentImage = imagePreview ?? item.imageUrl ?? null
 
   return (
-    <div className="max-w-2xl space-y-6">
+    <div className="max-w-2xl space-y-6 page-enter">
       <Link href="/inventory-manager/items" className="inline-flex items-center space-x-2 text-sm font-medium text-[--ink-secondary] hover:text-[--ink-primary]">
         <ArrowLeft size={16} />
         <span>Back to Items</span>
