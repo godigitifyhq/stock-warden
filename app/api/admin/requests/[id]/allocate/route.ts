@@ -38,7 +38,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const request = await prisma.request.findUnique({ where: { id: requestId }, include: { items: true } })
   if (!request) return apiError(new NotFoundError('REQUEST_NOT_FOUND'))
 
-  if (!(request.status === 'REQUESTED' || request.status === 'PENDING')) {
+  if (request.status !== 'REQUESTED') {
     return apiError(new ConflictError('INVALID_STATUS'))
   }
 

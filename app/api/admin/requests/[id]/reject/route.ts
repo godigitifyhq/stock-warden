@@ -38,7 +38,7 @@ export async function PATCH(
     return apiError(new NotFoundError("Request not found."));
   }
 
-  if (request.status !== "REQUESTED" && request.status !== "PENDING") {
+  if (request.status !== "REQUESTED") {
     return apiError(
       new ConflictCodeError("ALREADY_PROCESSED", "Request already processed.")
     );

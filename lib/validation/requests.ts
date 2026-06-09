@@ -20,3 +20,7 @@ export const CancelRequestSchema = z.object({
 export const ReRequestSchema = z.object({
   requestId: z.string().uuid(),
 });
+
+export const InventoryManagerRequestActionSchema = z.object({
+  notes: z.string().max(500).optional(),
+});

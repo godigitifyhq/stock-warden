@@ -17,7 +17,7 @@ export async function PATCH(
   const { id } = await params;
   const request = await assertRequestAccess(id, user.id, user.role);
 
-  if (request.status !== "REQUESTED" && request.status !== "PENDING") {
+  if (request.status !== "REQUESTED") {
     return apiError(new ConflictError("Cannot cancel this request."));
   }
 

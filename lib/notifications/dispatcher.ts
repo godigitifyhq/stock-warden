@@ -81,3 +81,26 @@ export async function dispatchToAdmins(payload: Omit<NotificationPayload, "userI
     )
   );
 }
+
+export async function dispatchToInventoryManagers(payload: Omit<NotificationPayload, "userId">) {
+  const inventoryManagers = await prisma.user.findMany({
+    where: { role: "INVENTORY_MANAGER", isActive: true },
+    select: { id: true, email: true, name: true },
+  });
+
+  await Promise.all(
+    inventoryManagers.map((manager) =>
+      dispatch({
+        ...payload,
+        userId: manager.id,
+        emailTo: manager.email,
+        emailData: payload.emailData
+          ? {
+              ...payload.emailData,
+              recipientName: manager.name,
+            }
+          : undefined,
+      })
+    )
+  );
+}

@@ -15,6 +15,29 @@ const CATEGORY_OPTIONS = [
   'Cleaning & Housekeeping', 'Transport',
 ]
 
+const UNIT_OPTIONS = [
+  { value: 'pieces', label: 'Pieces (pcs)' },
+  { value: 'dozens', label: 'Dozens (dz)' },
+  { value: 'reams', label: 'Reams' },
+  { value: 'boxes', label: 'Boxes' },
+  { value: 'packets', label: 'Packets' },
+  { value: 'sets', label: 'Sets' },
+  { value: 'pairs', label: 'Pairs' },
+  { value: 'rolls', label: 'Rolls' },
+  { value: 'sheets', label: 'Sheets' },
+  { value: 'bundles', label: 'Bundles' },
+  { value: 'cartons', label: 'Cartons' },
+  { value: 'bottles', label: 'Bottles' },
+  { value: 'tubes', label: 'Tubes' },
+  { value: 'liters', label: 'Liters (L)' },
+  { value: 'milliliters', label: 'Milliliters (mL)' },
+  { value: 'kilograms', label: 'Kilograms (kg)' },
+  { value: 'grams', label: 'Grams (g)' },
+  { value: 'meters', label: 'Meters (m)' },
+  { value: 'feet', label: 'Feet (ft)' },
+  { value: 'units', label: 'Units' },
+]
+
 export default function IMAddItemPage() {
   const router = useRouter()
   const [form, setForm] = useState({
@@ -41,7 +64,7 @@ export default function IMAddItemPage() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!form.name.trim() || !form.category || !form.unit.trim()) {
+    if (!form.name.trim() || !form.category || !form.unit) {
       toast.error('Please fill in all required fields')
       return
     }
@@ -117,14 +140,17 @@ export default function IMAddItemPage() {
           </div>
           <div>
             <label className="block text-sm font-medium mb-1">Unit <span className="text-red-500">*</span></label>
-            <input
+            <select
               required
-              type="text"
               value={form.unit}
               onChange={(e) => setForm({ ...form, unit: e.target.value })}
               className="w-full px-3 py-2 border border-[--border-default] rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-black"
-              placeholder="e.g. pieces, reams"
-            />
+            >
+              <option value="" disabled>Select unit</option>
+              {UNIT_OPTIONS.map((u) => (
+                <option key={u.value} value={u.value}>{u.label}</option>
+              ))}
+            </select>
           </div>
         </div>
 

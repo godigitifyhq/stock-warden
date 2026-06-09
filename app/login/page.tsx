@@ -6,10 +6,12 @@ import Link from 'next/link'
 import { toast } from 'react-hot-toast'
 import { signIn } from 'next-auth/react'
 import { api } from '@/lib/api/client'
+import { Eye, EyeOff } from 'lucide-react'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
@@ -71,6 +73,7 @@ export default function LoginPage() {
               id="email"
               type="email"
               required
+              autoComplete="email"
               className="w-full px-3 py-2 border border-[--border-default] rounded-md focus:outline-none focus:ring-1 focus:ring-black"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -81,14 +84,25 @@ export default function LoginPage() {
             <label className="block text-sm font-medium text-[--ink-primary] mb-1" htmlFor="password">
               Password
             </label>
-            <input
-              id="password"
-              type="password"
-              required
-              className="w-full px-3 py-2 border border-[--border-default] rounded-md focus:outline-none focus:ring-1 focus:ring-black"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <div className="relative">
+              <input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                required
+                autoComplete="current-password"
+                className="w-full px-3 py-2 pr-10 border border-[--border-default] rounded-md focus:outline-none focus:ring-1 focus:ring-black"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[--ink-secondary] hover:text-[--ink-primary] transition-colors"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
           </div>
 
           <button
@@ -96,7 +110,7 @@ export default function LoginPage() {
             disabled={loading}
             className="w-full bg-black text-white py-2 rounded-md font-medium hover:bg-[--accent-hover] transition-colors disabled:opacity-50"
           >
-            {loading ? 'Signing in...' : 'Sign In'}
+            {loading ? 'Signing in…' : 'Sign In'}
           </button>
         </form>
 

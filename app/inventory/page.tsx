@@ -67,26 +67,27 @@ export default function InventoryPage() {
 
   return (
     <div className="space-y-6 page-enter">
-      <div className="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0 md:space-x-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-display font-bold">Inventory</h1>
           <p className="text-[--ink-secondary] text-sm">Browse and request available items</p>
         </div>
-        
-        <div className="flex items-center space-x-4">
-          <div className="relative">
+
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <div className="relative flex-1 sm:flex-none">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[--ink-disabled]" size={18} />
-            <input 
+            <input
               type="text"
               placeholder="Search items..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-10 pr-4 py-2 border border-[--border-default] rounded-md focus:outline-none focus:ring-1 focus:ring-black w-full md:w-64"
+              className="pl-10 pr-4 py-2 border border-[--border-default] rounded-md focus:outline-none focus:ring-1 focus:ring-black w-full sm:w-64"
             />
           </div>
-          <button 
+          <button
             onClick={() => setIsCartOpen(true)}
-            className="relative p-2 bg-white border border-[--border-default] rounded-md hover:bg-[--bg-subtle]"
+            className="relative p-2 bg-white border border-[--border-default] rounded-md hover:bg-[--bg-subtle] shrink-0"
+            aria-label={cart.items.length > 0 ? `View request cart (${cart.items.length} items)` : 'View request cart'}
           >
             <ShoppingCart size={20} />
             {cart.items.length > 0 && (

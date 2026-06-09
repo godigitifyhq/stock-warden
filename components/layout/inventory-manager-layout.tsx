@@ -1,6 +1,6 @@
 'use client'
 
-import { Archive, Inbox, LogOut, Menu, Package, Settings, X } from 'lucide-react'
+import { Archive, ClipboardList, LogOut, Menu, Package, Plus, Settings, X } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { signOut } from 'next-auth/react'
@@ -31,10 +31,11 @@ export function InventoryManagerLayout({ children }: { children: React.ReactNode
   }
 
   const links = [
-    { href: '/inventory-manager', label: 'Dashboard', icon: Package },
-    { href: '/inventory-manager/items', label: 'All Items', icon: Archive },
-    { href: '/inventory-manager/items/new', label: 'Add New Item', icon: Inbox },
-    { href: '/inventory-manager/profile', label: 'My Profile', icon: Settings },
+    { href: '/inventory-manager', label: 'Dashboard', icon: Package, exact: true },
+    { href: '/inventory-manager/requests', label: 'Requests', icon: ClipboardList, exact: false },
+    { href: '/inventory-manager/items', label: 'All Items', icon: Archive, exact: false },
+    { href: '/inventory-manager/items/new', label: 'Add New Item', icon: Plus, exact: true },
+    { href: '/inventory-manager/profile', label: 'My Profile', icon: Settings, exact: false },
   ]
 
   return (
@@ -83,7 +84,7 @@ export function InventoryManagerLayout({ children }: { children: React.ReactNode
         <nav className="flex-1 py-6 px-3 flex flex-col space-y-1 overflow-y-auto">
           {links.map((link) => {
             const Icon = link.icon
-            const isActive = pathname.startsWith(link.href)
+            const isActive = link.exact ? pathname === link.href : pathname.startsWith(link.href)
             return (
               <Link
                 key={link.href}

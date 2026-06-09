@@ -27,6 +27,29 @@ const CATEGORY_OPTIONS = [
   'Transport',
 ]
 
+const UNIT_OPTIONS = [
+  { value: 'pieces', label: 'Pieces (pcs)' },
+  { value: 'dozens', label: 'Dozens (dz)' },
+  { value: 'reams', label: 'Reams' },
+  { value: 'boxes', label: 'Boxes' },
+  { value: 'packets', label: 'Packets' },
+  { value: 'sets', label: 'Sets' },
+  { value: 'pairs', label: 'Pairs' },
+  { value: 'rolls', label: 'Rolls' },
+  { value: 'sheets', label: 'Sheets' },
+  { value: 'bundles', label: 'Bundles' },
+  { value: 'cartons', label: 'Cartons' },
+  { value: 'bottles', label: 'Bottles' },
+  { value: 'tubes', label: 'Tubes' },
+  { value: 'liters', label: 'Liters (L)' },
+  { value: 'milliliters', label: 'Milliliters (mL)' },
+  { value: 'kilograms', label: 'Kilograms (kg)' },
+  { value: 'grams', label: 'Grams (g)' },
+  { value: 'meters', label: 'Meters (m)' },
+  { value: 'feet', label: 'Feet (ft)' },
+  { value: 'units', label: 'Units' },
+]
+
 const PAGE_SIZE = 20
 
 type InventoryItem = {
@@ -356,7 +379,13 @@ function AddItemModal({ onClose }: { onClose: () => void }) {
                 {CATEGORY_OPTIONS.map((category) => <option key={category} value={category}>{category}</option>)}
               </select>
             </div>
-            <div><label className="block text-sm font-medium mb-1">Unit (e.g. pieces, reams)</label><input required type="text" value={formData.unit} onChange={(e) => setFormData({ ...formData, unit: e.target.value })} className="w-full px-3 py-2 border rounded-md" /></div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Unit</label>
+              <select required value={formData.unit} onChange={(e) => setFormData({ ...formData, unit: e.target.value })} className="w-full px-3 py-2 border rounded-md">
+                <option value="" disabled>Select unit</option>
+                {UNIT_OPTIONS.map((u) => <option key={u.value} value={u.value}>{u.label}</option>)}
+              </select>
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -474,7 +503,13 @@ function EditItemModal({ item, onClose }: { item: any; onClose: () => void }) {
                 {CATEGORY_OPTIONS.map((category) => <option key={category} value={category}>{category}</option>)}
               </select>
             </div>
-            <div><label className="block text-sm font-medium mb-1">Unit</label><input required type="text" value={formData.unit} onChange={(e) => setFormData({ ...formData, unit: e.target.value })} className="w-full px-3 py-2 border rounded-md" /></div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Unit</label>
+              <select required value={formData.unit} onChange={(e) => setFormData({ ...formData, unit: e.target.value })} className="w-full px-3 py-2 border rounded-md">
+                <option value="" disabled>Select unit</option>
+                {UNIT_OPTIONS.map((u) => <option key={u.value} value={u.value}>{u.label}</option>)}
+              </select>
+            </div>
           </div>
           <div>
             <label className="block text-sm font-medium mb-1">Total Quantity</label>
